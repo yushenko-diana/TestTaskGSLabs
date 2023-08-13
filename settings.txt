@@ -1,0 +1,4 @@
+host_ip=192.168.0.13
+port=48700
+destinationAddresses=[133.144.243.16 133.144.243.17 133.144.243.18 133.144.243.19]
+numberOfDatagrams=14
