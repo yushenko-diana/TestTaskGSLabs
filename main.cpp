@@ -3,6 +3,7 @@
 #include "loadBalancer.h"
 #include "settings.h"
 #include "settingsParser.h"
+#include <deque>
 
 
 int main(int argc, char *argv[]) {
@@ -19,22 +20,20 @@ int main(int argc, char *argv[]) {
         Server server(settings.host_ip, settings.port);
         LoadBalancer balancer(settings.destinationAddresses,settings.port);
 
-        unsigned long currentTime = std::chrono::duration_cast<std::chrono::milliseconds>(
+        uint64_t currentTime = std::chrono::duration_cast<std::chrono::milliseconds>(
                                     std::chrono::system_clock::now().time_since_epoch()).count();
-        unsigned long previousTime = currentTime;
-        int numberOfDatagrams = 0;
+        std::deque<uint64_t> timeStamp;
         char buffer[4096];
         while(1) {
             const int size = server.read(buffer, true);
-            if(numberOfDatagrams < settings.numberOfDatagrams) {
-                balancer.balanceLoad(server, buffer, size);
-                ++numberOfDatagrams;
-            }
             currentTime = std::chrono::duration_cast<std::chrono::milliseconds>(
                                     std::chrono::system_clock::now().time_since_epoch()).count();
-            if(currentTime - previousTime >= 1000) {
-                previousTime = currentTime;
-                numberOfDatagrams = 0;
+            if(timeStamp.size() < settings.numberOfDatagrams) {
+                timeStamp.push_back(currentTime);
+                balancer.balanceLoad(server, buffer, size);
+            }
+            if((currentTime - timeStamp.front() >= 1000) && !timeStamp.empty()) {
+                timeStamp.pop_front();
             }
         }
     }
@@ -43,6 +42,10 @@ int main(int argc, char *argv[]) {
         return -1;
     }
     catch(const std::runtime_error& e) {
+        std::cerr << e.what() << std::endl;
+        return -1;
+    }
+    catch(const std::invalid_argument& e) {
         std::cerr << e.what() << std::endl;
         return -1;
     }

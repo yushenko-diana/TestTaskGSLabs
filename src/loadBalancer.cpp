@@ -10,7 +10,7 @@ void LoadBalancer::balanceLoad(const Server& server, const char* buffer, int siz
 
     server.write(buffer, size, true, *currentIt, port);
     ++currentIt;
-    if(std::next(currentIt) == destinationAddresses.end()) {
-        currentIt = destinationAddresses.begin();
+    if(currentIt == destinationAddresses.cend()) {
+        currentIt = destinationAddresses.cbegin();
     }
 }

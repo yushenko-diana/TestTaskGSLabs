@@ -29,7 +29,7 @@ int Server::read(char* buffer, bool blockRead) {
     }
 
     if(readRes == -1) {
-        std::cerr << "unable to read" << strerror(errno) << std::endl;
+        std::cerr << "unable to read: " << strerror(errno) << std::endl;
     }
     return readRes;
 
