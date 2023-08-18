@@ -14,24 +14,21 @@ public:
      * @param [const vector<string>&]destinationAddresses. Адрес отправки датаграмм
      * @param [int]port. Порт отправки датаграмм
      */
-    LoadBalancer(const std::vector<std::string>& destinationAddresses, int port);
+    LoadBalancer(const std::vector<std::string>& destinationAddresses);
     /**
      * @brief Функция балансировки нагрузки
      * @param [const Server&]server. Объект сервера
      * @param [const char*]buffer. Датаграмма
      * @param [int]size. Размер датаграммы
+     * @param [const int]port. Порт для отправк датаграмм
      */
-    void balanceLoad(const Server& server, const char* buffer, int size);
+    void balanceLoad(const Server& server, const char* buffer, int size, const int port);
 
 private:
     /**
      * @brief IP адреса серверов для отправки датаграмм
      */
     const std::vector<std::string> destinationAddresses;
-    /**
-     * @brief Порт для отправки датаграмм
-     */
-    const int port;
     /**
      * @brief Итератор для хранения текущего ip адреса
      */

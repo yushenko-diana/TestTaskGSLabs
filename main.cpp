@@ -18,19 +18,17 @@ int main(int argc, char *argv[]) {
         SettingsParser settingsParser(argv[1]);
         settingsParser.readParameters(settings);
         Server server(settings.host_ip, settings.port);
-        LoadBalancer balancer(settings.destinationAddresses,settings.port);
-
-        uint64_t currentTime = std::chrono::duration_cast<std::chrono::milliseconds>(
-                                    std::chrono::system_clock::now().time_since_epoch()).count();
+        LoadBalancer balancer(settings.destinationAddresses);
+        uint64_t currentTime;
         std::deque<uint64_t> timeStamp;
         char buffer[4096];
         while(1) {
             const int size = server.read(buffer, true);
             currentTime = std::chrono::duration_cast<std::chrono::milliseconds>(
                                     std::chrono::system_clock::now().time_since_epoch()).count();
-            if(timeStamp.size() < settings.numberOfDatagrams) {
+            if(timeStamp.size() <= settings.numberOfDatagrams) {
                 timeStamp.push_back(currentTime);
-                balancer.balanceLoad(server, buffer, size);
+                balancer.balanceLoad(server, buffer, size,settings.port);
             }
             if((currentTime - timeStamp.front() >= 1000) && !timeStamp.empty()) {
                 timeStamp.pop_front();

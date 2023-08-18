@@ -3,6 +3,10 @@
 
 Server::Server(const std::string ipAddress, const int port) {
 
+    if(ipAddress.empty() || port == 0) {
+        throw std::invalid_argument("Bad argument");
+    }
+
     serverSocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if(serverSocket == -1) {
         throw std::runtime_error(std::string("unable to create server socket: ") + strerror(errno));

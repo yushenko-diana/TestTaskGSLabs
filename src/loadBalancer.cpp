@@ -1,11 +1,14 @@
 #include "loadBalancer.h"
 #include <algorithm>
 
-LoadBalancer::LoadBalancer(const std::vector<std::string>& destinationAddresses, int port):destinationAddresses(destinationAddresses), port(port) {
+LoadBalancer::LoadBalancer(const std::vector<std::string>& destinationAddresses):destinationAddresses(destinationAddresses) {
+    if(destinationAddresses.empty()) { 
+        throw std::invalid_argument("Destination addresses empty");
+    }
     currentIt = this->destinationAddresses.cbegin();
 }
 
-void LoadBalancer::balanceLoad(const Server& server, const char* buffer, int size) {
+void LoadBalancer::balanceLoad(const Server& server, const char* buffer, int size, const int port) {
 
     server.write(buffer, size, true, *currentIt, port);
     ++currentIt;
