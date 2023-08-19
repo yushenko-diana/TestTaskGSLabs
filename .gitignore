@@ -1,5 +1,4 @@
-.vscode/*
-build/*
-googletest/*
+.vscode
+build
+googletest
 tests.cpp
-

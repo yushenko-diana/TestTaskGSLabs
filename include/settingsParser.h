@@ -56,28 +56,28 @@ private:
     bool isItIPAddress(const std::string& str);
 
     /**
-     * @brief Функция для проверки корректности IP адреса, содержащегося в строке 
+     * @brief Функция для проверки корректности IP адреса, содержащегося в строке
      * @param [string]str. Строка для проверки
      * @return Возвращает true, если IP адрес корректен, false, если нет
     */
     bool isIPAddressCorrect(const std::string& str);
 
     /**
-     * @brief Функция, проверяющая, является ли строка массивом 
+     * @brief Функция, проверяющая, является ли строка массивом
      * @param [string]str. Строка для проверки
      * @return Возвращает true, если строка содержит массив, false, если нет
      */
     bool isItArray(const std::string& str);
     /**
-     * @brief Функция, проверяющая корректность IP адресов в массиве 
-     * @param [vector<string>&]array 
+     * @brief Функция, проверяющая корректность IP адресов в массиве
+     * @param [vector<string>&]array
      * @return Возвращает true, если адреса корректны, false, если нет
      */
     bool isIPAdressesCorrect(std::vector<std::string> array);
     /**
      * @brief Функция, проверяющая строку, содержащую число, на корректность
      * Функция проверяет строку на содержащую число на наличие в ней цифр
-     * @param [string]str 
+     * @param [string]str
      * @return Возвращает true, если число корректно, false, если нет
      */
     bool isNumberValid(const std::string str);

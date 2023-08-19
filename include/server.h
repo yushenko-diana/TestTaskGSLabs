@@ -15,11 +15,15 @@
 class Server {
 public:
     /**
-    * @brief Конструктор класса клиента
+    * @brief Конструктор класса сервера
     * @param [string]ipAddress IP адрес, на котором будет открыт сокет
     * @param [int]port. Порт, на котором будет открыт сокет
     */
     Server(const std::string ipAddress, int port);
+    /**
+     * @brief Деструктор класса сервера
+     */
+    ~Server();
     /**
      * @brief Функция отправки датаграммы
      * @param [const char*]buffer. Датаграмма

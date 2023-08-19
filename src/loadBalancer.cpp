@@ -2,8 +2,8 @@
 #include <algorithm>
 
 LoadBalancer::LoadBalancer(const std::vector<std::string>& destinationAddresses):destinationAddresses(destinationAddresses) {
-    if(destinationAddresses.empty()) { 
-        throw std::invalid_argument("Destination addresses empty");
+    if(destinationAddresses.empty()) {
+        throw std::invalid_argument("Bad destination addresses");
     }
     currentIt = this->destinationAddresses.cbegin();
 }

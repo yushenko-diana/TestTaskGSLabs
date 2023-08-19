@@ -26,7 +26,7 @@ void SettingsParser::readParameters(Settings& settings) {
 
         getline(file, str);
         if(str.empty()) { continue; };
-        str.erase(remove(str.begin(),str.end(),' '),str.end());
+        str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
         int equalPose = str.find('=');
         if(equalPose == -1 || str.empty() || str.substr(0, equalPose).empty() || str.substr(equalPose+1).empty()) {
             continue;
@@ -44,7 +44,7 @@ void SettingsParser::readParameters(Settings& settings) {
         }
         if(key == DESTINATION_ADDRESSES_KEY && isItArray(value)) {
             parseArray(data, value);
-            if(!data.empty() && isIPAdressesCorrect(data)) { 
+            if(!data.empty() && isIPAdressesCorrect(data)) {
                 settings.destinationAddresses = data;
             }
         }
@@ -73,7 +73,7 @@ bool SettingsParser::isBracketSequenceRight(const std::string& str) {
         if(c == ']' && brackets.empty()) {
             return false;
         }
-        if(c == '[') { 
+        if(c == '[') {
             brackets.push(c);
         }
         if(c == ']' && !brackets.empty() && brackets.top() == '[') {
@@ -81,15 +81,16 @@ bool SettingsParser::isBracketSequenceRight(const std::string& str) {
         }
     }
     if(brackets.size() == 0) { return true; }
-    else { return false; }
+    return false;
 }
+
 void SettingsParser::parseArray(std::vector<std::string>& array, const std::string& str) {
     if(str.empty()) { return; }
-    if(!isBracketSequenceRight(str)) { return; } 
+    if(!isBracketSequenceRight(str)) { return; }
     int openBracketPose = str.find_last_of('[');
     int closeBracketPose = str.find_first_of(']');
     std::string line = str.substr(openBracketPose+1, closeBracketPose-1);
-    splitString(array, line,',');
+    splitString(array, line, ',');
 }
 
 bool SettingsParser::isItIPAddress(const std::string& str) {
@@ -102,19 +103,22 @@ bool SettingsParser::isItIPAddress(const std::string& str) {
 bool SettingsParser::isIPAddressCorrect(const std::string& str) {
     if(!isItIPAddress(str) || str.size() < 7 || str.size() > 15) { return false; }
     std::vector<std::string> octets;
-    splitString(octets, str,'.');
+    splitString(octets, str, '.');
     for(auto octet: octets) {
         if(!std::all_of(octet.begin(), octet.end(), ::isdigit)) { return false; }
         if(std::stoi(octet) > 255) { return false; }
     }
-        
     return true;
 }
 
 bool SettingsParser::isItArray(const std::string& str) {
     if(str.empty()) { return false; }
-    if(str.find('[') != -1 && str.find(']') != -1) {
-        return true;
+    if(str.find('[') != -1 && str.find(']') != -1 ) {
+        size_t amountOfOpenBrackets = std::count(str.begin(), str.end(), '[');
+        size_t amountOfCloseBrackets = std::count(str.begin(), str.end(), ']');
+        if(amountOfOpenBrackets == 1 && amountOfCloseBrackets == 1) {
+            return true;
+        }
     }
     return false;
 }
@@ -124,7 +128,7 @@ bool SettingsParser::isIPAdressesCorrect(std::vector<std::string> array) {
     for(auto c: array) {
         if(!isIPAddressCorrect(c)) { return false; }
     }
-    return true;    
+    return true;
 }
 
 bool SettingsParser::isNumberValid(const std::string str) {
